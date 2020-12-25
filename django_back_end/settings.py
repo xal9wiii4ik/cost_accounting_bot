@@ -1,6 +1,8 @@
 import dotenv
 import os
 
+from datetime import timedelta
+
 from pathlib import Path
 
 dotenv.load_dotenv()
@@ -30,7 +32,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+    'rest_framework.authtoken',
+
+    'apps.user',
 ]
+
+# Set User Model
+AUTH_USER_MODEL = 'user.CustomUser'
+PASSWORD='123hadkljn322nld'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -95,6 +106,54 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Rest framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
+    'DEFAULT_PERMISSIONS_CLASSES': (
+        'rest_framework.permissions.AllowAny'
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+# simple jwt settings
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Token',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -114,6 +173,19 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-BOT_TOKEN = str(os.getenv("BOT_TOKEN"))
-ADMIN_ID = str(os.getenv("ADMIN_ID"))
-ip = os.getenv("ip")
+# Media Files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# Bot settings
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+AUTHORIZATION_TOKEN = os.getenv("AUTHORIZATION_TOKEN")
+HEADERS = {
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36',
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'Authorization': AUTHORIZATION_TOKEN,
+    'Content-Type': 'application/json',
+}
+
+ADMIN_ID = int(os.getenv("ADMIN_ID"))
+SERVER_HOST = os.getenv("SERVER_HOST")
