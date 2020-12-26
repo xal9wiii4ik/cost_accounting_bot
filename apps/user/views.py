@@ -14,12 +14,8 @@ from apps.user.services_views import (
 from handlers.users.start import add_user
 
 
-# from
-
-
 class UsersQueueViewSet(mixins.CreateModelMixin,
                         mixins.DestroyModelMixin,
-                        mixins.ListModelMixin,
                         GenericViewSet):
     """View Set для модели очереди пользователей"""
 

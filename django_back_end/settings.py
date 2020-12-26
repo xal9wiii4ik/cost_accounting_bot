@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     'apps.user',
+    'apps.cost_account',
 ]
 
 # Set User Model
