@@ -1,3 +1,5 @@
+import asyncio
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import mixins, GenericViewSet
@@ -5,7 +7,14 @@ from rest_framework import status, permissions
 
 from apps.user.models import UserQueue
 from apps.user.serializers import UsersQueueModelSerializer
-from apps.user.services_views import verification_user, add_user_and_remove_from_user_queue
+from apps.user.services_views import (
+    verification_user,
+    add_user_and_remove_from_user_queue
+)
+from handlers.users.start import add_user
+
+
+# from
 
 
 class UsersQueueViewSet(mixins.CreateModelMixin,
@@ -33,7 +42,13 @@ class AddUserAndRemoveFromQueue(APIView):
     """
 
     def get(self, request, chat_id: int) -> Response:
-        add_user_and_remove_from_user_queue(chat_id=chat_id)
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop=loop)
+        finally:
+            add_user_and_remove_from_user_queue(chat_id=chat_id)
+            loop.run_until_complete(add_user(chat_id=chat_id))
         return Response(data={'ok': 'User has been added'},
                         status=status.HTTP_201_CREATED)
-
