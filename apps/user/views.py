@@ -5,13 +5,22 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import mixins, GenericViewSet
 from rest_framework import status, permissions
 
-from apps.user.models import UserQueue
-from apps.user.serializers import UsersQueueModelSerializer
+from apps.user.models import UserQueue, CustomUser
+from apps.user.serializers import UsersQueueModelSerializer, CustomUserModelSerializer
 from apps.user.services_views import (
     verification_user,
     add_user_and_remove_from_user_queue
 )
 from handlers.users.start import add_user
+
+
+class CustomUserViewSet(mixins.ListModelMixin,
+                        GenericViewSet):
+    """Список пользователей"""
+
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserModelSerializer
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class UsersQueueViewSet(mixins.CreateModelMixin,

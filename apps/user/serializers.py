@@ -8,7 +8,7 @@ class CustomUserModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'chat_id']
+        fields = ['chat_id']
 
 
 class UsersQueueModelSerializer(serializers.ModelSerializer):

@@ -4,12 +4,17 @@ from django.urls import path
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from apps.user.views import UsersQueueViewSet, AddUserAndRemoveFromQueue
+from apps.user.views import (
+    UsersQueueViewSet,
+    AddUserAndRemoveFromQueue,
+    CustomUserViewSet,
+)
 from apps.cost_account.views import CostAccountHistoryViewSet
 
 router = routers.SimpleRouter()
 router.register(r'users_queue', UsersQueueViewSet)
 router.register(r'cost_history', CostAccountHistoryViewSet)
+router.register(r'users', CustomUserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
