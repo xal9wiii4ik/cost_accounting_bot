@@ -1,4 +1,3 @@
-import json
 import requests
 import datetime
 
@@ -10,16 +9,24 @@ from loader import dp
 from keyboards.inline.approval_spending_keyboard import markup
 from states.spending_state import SpendingState
 from django_back_end import settings
+from utils.services import (
+    get_data_from_request,
+    check_user_permission,
+)
 
 
 @dp.message_handler(commands=['add_spending'])
 async def add_spending(message: types.Message) -> None:
     """Добавление расхода"""
 
-    await SpendingState.EnterSpending.set()
-    await dp.bot.send_message(chat_id=message.from_user.id,
-                              text='Enter your spending in belorussian rubles.\n'
-                                   'For example: такси 3, мтс 26, etc.')
+    if check_user_permission(chat_id=message.from_user.id):
+        await SpendingState.EnterSpending.set()
+        await dp.bot.send_message(chat_id=message.from_user.id,
+                                  text='Enter your spending in belorussian rubles.\n'
+                                       'For example: такси 3, мтс 26, etc.')
+    else:
+        await dp.bot.send_message(chat_id=message.from_user.id,
+                                  text=f'Sorry( \nAdmin has not add you yet. Please wait')
 
 
 @dp.message_handler(state=SpendingState.EnterSpending)
@@ -82,36 +89,36 @@ async def reset(call: CallbackQuery, state: FSMContext):
 async def my_history_for_month(message: types.Message) -> None:
     """Узнать историю за месяц"""
 
-    response = requests.get(url=settings.SERVER_HOST.replace('path', 'cost_history'),
-                            headers={
-                                'Authorization': settings.AUTHORIZATION_TOKEN
-                            }, json={'chat_id': message.from_user.id})
-    datas = json.loads(response._content.decode('utf-8'))
-    date_now = datetime.datetime.now()
-    all_price = 0
-    for data in datas:
-        date = datetime.datetime.strptime(data['date'], '%Y-%m-%d')
-        if date.month == date_now.month:
-            all_price += float(data['price_spending'])
-            await dp.bot.send_message(chat_id=message.from_user.id,
-                                      text=f'{data["date"]}:\n'
-                                           f'name: {data["name_spending"]}\n'
-                                           f'price: {data["price_spending"]}\n')
-    await dp.bot.send_message(chat_id=message.from_user.id,
-                              text=f'At now you spend {all_price}')
+    if check_user_permission(chat_id=message.from_user.id):
+        datas = get_data_from_request(path='cost_history')
+        date_now = datetime.datetime.now()
+        all_price = 0
+        for data in datas:
+            date = datetime.datetime.strptime(data['date'], '%Y-%m-%d')
+            if date.month == date_now.month:
+                all_price += float(data['price_spending'])
+                await dp.bot.send_message(chat_id=message.from_user.id,
+                                          text=f'{data["date"]}:\n'
+                                               f'name: {data["name_spending"]}\n'
+                                               f'price: {data["price_spending"]}\n')
+        await dp.bot.send_message(chat_id=message.from_user.id,
+                                  text=f'At now you spend {all_price}')
+    else:
+        await dp.bot.send_message(chat_id=message.from_user.id,
+                                  text=f'Sorry( \nAdmin has not add you yet. Please wait')
 
 
 @dp.message_handler(commands=['my_history'])
 async def my_history(message: types.Message) -> None:
     """Узнать всю историю"""
 
-    response = requests.get(url=settings.SERVER_HOST.replace('path', 'cost_history'),
-                            headers={
-                                'Authorization': settings.AUTHORIZATION_TOKEN
-                            }, json={'chat_id': message.from_user.id})
-    datas = json.loads(response._content.decode('utf-8'))
-    for data in datas:
+    if check_user_permission(chat_id=message.from_user.id):
+        datas = get_data_from_request(path='cost_history')
+        for data in datas:
+            await dp.bot.send_message(chat_id=message.from_user.id,
+                                      text=f'{data["date"]}:\n'
+                                           f'name: {data["name_spending"]}\n'
+                                           f'price: {data["price_spending"]}\n')
+    else:
         await dp.bot.send_message(chat_id=message.from_user.id,
-                                  text=f'{data["date"]}:\n'
-                                       f'name: {data["name_spending"]}\n'
-                                       f'price: {data["price_spending"]}\n')
+                                  text=f'Sorry( \nAdmin has not add you yet. Please wait')
