@@ -1,5 +1,6 @@
 import json
 import requests
+import datetime
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
@@ -80,6 +81,29 @@ async def reset(call: CallbackQuery, state: FSMContext):
 @dp.message_handler(commands=['my_history_for_month'])
 async def my_history_for_month(message: types.Message) -> None:
     """Узнать историю за месяц"""
+
+    response = requests.get(url=settings.SERVER_HOST.replace('path', 'cost_history'),
+                            headers={
+                                'Authorization': settings.AUTHORIZATION_TOKEN
+                            }, json={'chat_id': message.from_user.id})
+    datas = json.loads(response._content.decode('utf-8'))
+    date_now = datetime.datetime.now()
+    all_price = 0
+    for data in datas:
+        date = datetime.datetime.strptime(data['date'], '%Y-%m-%d')
+        if date.month == date_now.month:
+            all_price += float(data['price_spending'])
+            await dp.bot.send_message(chat_id=message.from_user.id,
+                                      text=f'{data["date"]}:\n'
+                                           f'name: {data["name_spending"]}\n'
+                                           f'price: {data["price_spending"]}\n')
+    await dp.bot.send_message(chat_id=message.from_user.id,
+                              text=f'At now you spend {all_price}')
+
+
+@dp.message_handler(commands=['my_history'])
+async def my_history(message: types.Message) -> None:
+    """Узнать всю историю"""
 
     response = requests.get(url=settings.SERVER_HOST.replace('path', 'cost_history'),
                             headers={
