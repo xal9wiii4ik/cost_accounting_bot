@@ -1,18 +1,21 @@
 import datetime
 
 from handlers import dp
-from utils.services import get_data_from_request
+from utils.services import (
+    get_data_from_request,
+    get_data_from_request_with_chat_id,
+)
 
 
 async def month_report():
     """Отчет за месяц"""
 
     date_now = datetime.datetime.now()
-    if date_now.day == 1:
+    if date_now.day == 27:
         users = get_data_from_request(path='users')
         for user in users:
             if user['chat_id'] != 0:
-                datas = get_data_from_request(path='cost_history')
+                datas = get_data_from_request_with_chat_id(path='cost_history', chat_id=user['chat_id'])
                 price_report = [
                     {
                         'date': datas[0]['date'],

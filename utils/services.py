@@ -14,6 +14,16 @@ def get_data_from_request(path: str) -> list:
     return json.loads(response._content.decode('utf-8'))
 
 
+def get_data_from_request_with_chat_id(path: str, chat_id: int) -> list:
+    """Получение данных из запроса"""
+
+    response = requests.get(url=settings.SERVER_HOST.replace('path', path),
+                            headers={
+                                'Authorization': settings.AUTHORIZATION_TOKEN
+                            }, json={'chat_id': chat_id})
+    return json.loads(response._content.decode('utf-8'))
+
+
 def check_user_permission(chat_id: int) -> bool:
     """Проверка добавлен ли пользователь администратором"""
 

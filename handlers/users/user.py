@@ -12,6 +12,7 @@ from django_back_end import settings
 from utils.services import (
     get_data_from_request,
     check_user_permission,
+    get_data_from_request_with_chat_id,
 )
 
 
@@ -90,7 +91,7 @@ async def my_history_for_month(message: types.Message) -> None:
     """Узнать историю за месяц"""
 
     if check_user_permission(chat_id=message.from_user.id):
-        datas = get_data_from_request(path='cost_history')
+        datas = get_data_from_request_with_chat_id(path='cost_history', chat_id=message.from_user.id)
         date_now = datetime.datetime.now()
         all_price = 0
         for data in datas:
@@ -113,7 +114,7 @@ async def my_history(message: types.Message) -> None:
     """Узнать всю историю"""
 
     if check_user_permission(chat_id=message.from_user.id):
-        datas = get_data_from_request(path='cost_history')
+        datas = get_data_from_request_with_chat_id(path='cost_history', chat_id=message.from_user.id)
         for data in datas:
             await dp.bot.send_message(chat_id=message.from_user.id,
                                       text=f'{data["date"]}:\n'
