@@ -16,7 +16,7 @@ from handlers.users.start import add_user
 
 class CustomUserViewSet(mixins.ListModelMixin,
                         GenericViewSet):
-    """Список пользователей"""
+    """View for CustomUser"""
 
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserModelSerializer
@@ -26,7 +26,7 @@ class CustomUserViewSet(mixins.ListModelMixin,
 class UsersQueueViewSet(mixins.CreateModelMixin,
                         mixins.DestroyModelMixin,
                         GenericViewSet):
-    """View Set для модели очереди пользователей"""
+    """View Set for UserQueue"""
 
     queryset = UserQueue.objects.all()
     serializer_class = UsersQueueModelSerializer
@@ -42,8 +42,7 @@ class UsersQueueViewSet(mixins.CreateModelMixin,
 
 class AddUserAndRemoveFromQueue(APIView):
     """
-    Добавление пользователя и удаление его из очереди
-    и отправка уведомления
+    View for AddUserAndRemoveFromQueue
     """
 
     def get(self, request, chat_id: int) -> Response:

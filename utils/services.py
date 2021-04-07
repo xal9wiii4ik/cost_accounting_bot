@@ -5,7 +5,7 @@ from django_back_end import settings
 
 
 def get_data_from_request(path: str) -> list:
-    """Получение данных из запроса"""
+    """Get data from request"""
 
     response = requests.get(url=settings.SERVER_HOST.replace('path', path),
                             headers={
@@ -15,7 +15,7 @@ def get_data_from_request(path: str) -> list:
 
 
 def get_data_from_request_with_chat_id(path: str, chat_id: int) -> list:
-    """Получение данных из запроса"""
+    """Get data from request with chat_id"""
 
     response = requests.get(url=settings.SERVER_HOST.replace('path', path),
                             headers={
@@ -25,7 +25,7 @@ def get_data_from_request_with_chat_id(path: str, chat_id: int) -> list:
 
 
 def check_user_permission(chat_id: int) -> bool:
-    """Проверка добавлен ли пользователь администратором"""
+    """Check permission of user"""
 
     users = get_data_from_request(path='users')
     for user in users:

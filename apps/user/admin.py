@@ -9,7 +9,7 @@ from apps.user.models import CustomUser, UserQueue
 
 
 class CustomUserAdmin(UserAdmin):
-    """Кастомная админка для пользователя"""
+    """display custom user in admin panel"""
 
     list_display = ('username', 'email', 'is_staff', 'chat_id')
     fieldsets = (
@@ -29,11 +29,9 @@ admin.site.register(CustomUser, CustomUserAdmin)
 
 @admin.register(UserQueue)
 class UserQueueModel(admin.ModelAdmin):
-    """Админка для очереди пользователей"""
+    """display User queue in admin panel"""
 
     def button_add_user(self, obj):
-        """Кнопки добавить пользователя"""
-
         return mark_safe(f'<a href="{reverse("add_user_from_queue", args=(obj.chat_id,))}">add</a>')
 
     list_display = ('id', 'chat_id', 'username', 'first_name', 'last_name', 'button_add_user')

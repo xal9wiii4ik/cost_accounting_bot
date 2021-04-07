@@ -2,7 +2,7 @@ from aiogram.dispatcher.filters.state import State,StatesGroup
 
 
 class SpendingState(StatesGroup):
-    """Класс состояний добавление расходов"""
+    """State of add spending"""
 
     EnterSpending = State()
     Approval = State()

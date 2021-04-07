@@ -3,7 +3,7 @@ from django.db import models
 
 
 class CustomUser(AbstractUser):
-    """Переопределение модели пользователь"""
+    """Custom user model"""
 
     chat_id = models.BigIntegerField(verbose_name='Айди чата пользователя', default=0, null=True)
 
@@ -16,7 +16,7 @@ class CustomUser(AbstractUser):
 
 
 class UserQueue(models.Model):
-    """Очередь пользователей для добавления"""
+    """user queue model"""
 
     chat_id = models.BigIntegerField(verbose_name='Айди чата пользователя', default=0, null=True)
     username = models.CharField(max_length=150, unique=True)

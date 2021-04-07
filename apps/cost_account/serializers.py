@@ -4,7 +4,7 @@ from apps.cost_account.models import CostAccountHistory
 
 
 class CostAccountHistoryModelSerializer(serializers.ModelSerializer):
-    """Serializer для модели история расходов"""
+    """Serializer for CostAccountHistory model"""
 
     class Meta:
         model = CostAccountHistory

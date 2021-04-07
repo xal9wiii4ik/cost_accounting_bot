@@ -4,7 +4,7 @@ from apps.user.models import UserQueue, CustomUser
 
 
 class CustomUserModelSerializer(serializers.ModelSerializer):
-    """Model serializer для модели черного списка пользователей"""
+    """Model serializer for CustomUser"""
 
     class Meta:
         model = CustomUser
@@ -12,7 +12,7 @@ class CustomUserModelSerializer(serializers.ModelSerializer):
 
 
 class UsersQueueModelSerializer(serializers.ModelSerializer):
-    """Model serializer для модели очереди пользователей"""
+    """Model serializer for UserQueue"""
 
     class Meta:
         model = UserQueue

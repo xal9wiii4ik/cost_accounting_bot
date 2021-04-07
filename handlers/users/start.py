@@ -9,7 +9,7 @@ from django_back_end import settings
 
 @dp.message_handler(CommandStart())
 async def bot_start(message: types.Message) -> None:
-    """Команда /start"""
+    """command /start"""
 
     data = {
         'chat_id': message.from_user.id,

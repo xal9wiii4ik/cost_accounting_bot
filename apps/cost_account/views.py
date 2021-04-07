@@ -7,7 +7,7 @@ from apps.cost_account.serializers import CostAccountHistoryModelSerializer
 class CostAccountHistoryViewSet(mixins.ListModelMixin,
                                 mixins.CreateModelMixin,
                                 GenericViewSet):
-    """View Set для истории расходов"""
+    """View Set for CostAccountHistory model"""
 
     queryset = CostAccountHistory.objects.all()
     serializer_class = CostAccountHistoryModelSerializer

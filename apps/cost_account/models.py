@@ -2,7 +2,7 @@ from django.db import models
 
 
 class CostAccountHistory(models.Model):
-    """История расходов"""
+    """Cost account history model"""
 
     chat_id = models.BigIntegerField(verbose_name='Айди чата пользователя')
     name_spending = models.CharField(max_length=90, verbose_name='Имя расхода')

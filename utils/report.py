@@ -8,7 +8,7 @@ from utils.services import (
 
 
 async def month_report():
-    """Отчет за месяц"""
+    """Report for a month"""
 
     date_now = datetime.datetime.now()
     if date_now.day == 27:

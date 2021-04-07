@@ -8,7 +8,7 @@ from apps.user.models import (
 
 
 def add_user_and_remove_from_user_queue(chat_id: int) -> None:
-    """Добавления пользователя и удаление его из очереди"""
+    """add user and remove him from queue"""
 
     user_in_queue = UserQueue.objects.get(chat_id=chat_id)
     CustomUser.objects.create(username=user_in_queue.username,
@@ -20,7 +20,7 @@ def add_user_and_remove_from_user_queue(chat_id: int) -> None:
 
 
 def verification_user(chat_id: int) -> bool:
-    """Проверка нет ли пользователя в базе данных"""
+    """check user in database(if him exist)"""
 
     user = CustomUser.objects.filter(chat_id=chat_id)
     if len(user) == 1:

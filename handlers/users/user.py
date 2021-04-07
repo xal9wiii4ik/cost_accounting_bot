@@ -18,7 +18,7 @@ from utils.services import (
 
 @dp.message_handler(commands=['add_spending'])
 async def add_spending(message: types.Message) -> None:
-    """Добавление расхода"""
+    """add spending"""
 
     if check_user_permission(chat_id=message.from_user.id):
         await SpendingState.EnterSpending.set()
@@ -32,7 +32,7 @@ async def add_spending(message: types.Message) -> None:
 
 @dp.message_handler(state=SpendingState.EnterSpending)
 async def enter_name_of_spending(message: types.Message, state: FSMContext) -> None:
-    """Ввод названия расхода с подтверждением"""
+    """Enter the name of spending"""
 
     try:
         price = float(message.text.split()[-1])
@@ -53,7 +53,7 @@ async def enter_name_of_spending(message: types.Message, state: FSMContext) -> N
 
 @dp.callback_query_handler(text_contains='reset', state=SpendingState.Approval)
 async def reset(call: CallbackQuery, state: FSMContext):
-    """Если пользователь нажал ресет"""
+    """If user press reset"""
 
     await state.reset_state()
     await dp.bot.send_message(chat_id=call.from_user.id,
@@ -61,8 +61,8 @@ async def reset(call: CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(text_contains='yes', state=SpendingState.Approval)
-async def reset(call: CallbackQuery, state: FSMContext):
-    """Если пользователь нажал ресет"""
+async def agree(call: CallbackQuery, state: FSMContext):
+    """if user press agree"""
 
     data = await state.get_data()
     post_data = {
@@ -88,7 +88,7 @@ async def reset(call: CallbackQuery, state: FSMContext):
 
 @dp.message_handler(commands=['my_history_for_month'])
 async def my_history_for_month(message: types.Message) -> None:
-    """Узнать историю за месяц"""
+    """Check history of month"""
 
     if check_user_permission(chat_id=message.from_user.id):
         datas = get_data_from_request_with_chat_id(path='cost_history', chat_id=message.from_user.id)
@@ -111,7 +111,7 @@ async def my_history_for_month(message: types.Message) -> None:
 
 @dp.message_handler(commands=['my_history'])
 async def my_history(message: types.Message) -> None:
-    """Узнать всю историю"""
+    """Check all history"""
 
     if check_user_permission(chat_id=message.from_user.id):
         datas = get_data_from_request_with_chat_id(path='cost_history', chat_id=message.from_user.id)
