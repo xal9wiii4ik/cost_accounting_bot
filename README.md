@@ -12,7 +12,7 @@ and  With automaticaly report for a month and other chips
 6) smtp
 
 
-# date the code was written: 27.01.2020
+# date the code was written: 27.01.2021
 
 
 P.S. Architacture on all bot projects i took from here: https://github.com/Latand/aiogram-bot-template    
