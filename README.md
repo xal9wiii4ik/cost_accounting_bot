@@ -11,6 +11,7 @@ and  With automaticaly report for a month and other chips
 5) requests
 6) smtp
 
+# Database PostgreSQL
 
 # date the code was written: 27.01.2021
 
